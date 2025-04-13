@@ -1,0 +1,12 @@
+services:
+  labs:
+    hostname: project
+    image: timeloopaccelergy/timeloop-accelergy-pytorch:latest-${DOCKER_ARCH}
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./workspace:/home/workspace
+    environment:
+      - USER_UID=501
+      - USER_GID=20
+      - JUPYTER_SWITCHES=--NotebookApp.token=''

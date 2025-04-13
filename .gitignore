@@ -1,0 +1,3 @@
+workspace/**/.*
+output_dir/
+__pycache__/
