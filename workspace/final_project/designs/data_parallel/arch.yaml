@@ -15,10 +15,11 @@ architecture:
 
   - !Component
     name: disk                 # disk is the source of all datatypes
-    class: DRAM                # assume DRAM is large enough to store all the data, so no depth specification needed
+    class: DRAM                
     attributes:
       width: 64                # width in bits
       datawidth: datawidth 
+      depth: 999999
 
   - !Container
     name: GPU
@@ -29,7 +30,7 @@ architecture:
     class: SRAM
     attributes:
       width: 128
-      depth: 2048
+      depth: 999999
       datawidth: datawidth
       n_banks: 1
       n_rdwr_ports: 2
