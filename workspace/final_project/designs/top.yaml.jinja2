@@ -5,9 +5,6 @@
 # ==============================================================================
 # PROBLEM SPECIFICATION
 # ==============================================================================
-# Can be overridden with the jinja2_parse_data argument to spec.from_yaml_files()
-{% set problem = problem | default('_include/default_problem.yaml')%}
-
 # Set the problem file
 problem: {{include(problem, 'problem')}}
 
@@ -29,19 +26,7 @@ variables: # May get overridden by the architecture specification.
 # ==============================================================================
 components_mac_compute: {{include('components/mac_compute.yaml', 'compound_components')}}
 components_reg_storage: {{include('components/reg_storage.yaml', 'compound_components')}}
-
-{% if use_smart_storage_addr_gen | default(False)%}
-components_smart_storage: {{include('components/smart_storage_addr_gen.yaml', 'compound_components')}}
-{% else %}
 components_smart_storage: {{include('components/smart_storage.yaml', 'compound_components')}}
-{% endif %}
-
-# ==============================================================================
-# MAPPER SPECIFICATION
-# ==============================================================================
-{% if mapper is defined %}
-mapper: {{include(mapper, 'mapper')}}
-{% endif %}
 
 # ==============================================================================
 # MAPPING SPECIFICATION
@@ -54,11 +39,3 @@ globals:
   version: 0.4
   environment_variables:
     TIMELOOP_HIDE_INCONSEQUNTIAL_STATS: True
-
-
-# ==============================================================================
-# CONSTRAINTS SPECIFICATION
-# ==============================================================================
-{% if constraints is defined %}
-constraints: {{include(constraints, 'constraints')}}
-{% endif %}
