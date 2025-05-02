@@ -3,6 +3,12 @@ import numpy as np
 import os
 
 plot_dir = "plots"
+plt.rcParams.update({
+    'font.size': 14,
+    'font.weight': 'bold',
+    'axes.labelweight': 'bold',
+    'mathtext.fontset': 'cm',
+})
 
 def plot_energy_gpus(fc, conv):
     num_gpus = [config['num_gpus'] for config in fc['configs']]
@@ -18,7 +24,7 @@ def plot_energy_gpus(fc, conv):
 
     ax.set_xlabel('Num GPUs')
     ax.set_ylabel('Energy Percentage')
-    ax.set_title(f"Energy Percentage vs Num GPUs Plot")
+    # ax.set_title(f"Energy Percentage vs Num GPUs Plot")
     ax.set_xticks(x)
     ax.set_xticklabels(num_gpus)
     ax.legend()
@@ -42,7 +48,7 @@ def plot_cycle_gpus(fc, conv):
 
     ax.set_xlabel('Num GPUs')
     ax.set_ylabel('Cycle Percentage')
-    ax.set_title(f"Cycle Percentage vs Num GPUs Plot")
+    # ax.set_title(f"Cycle Percentage vs Num GPUs Plot")
     ax.set_xticks(x)
     ax.set_xticklabels(num_gpus)
     ax.legend()
@@ -58,12 +64,12 @@ def plot_energy_pe_meshX(result):
     width = 0.35
 
     fig, ax = plt.subplots()
-    ax.bar(x - width/2, [energy * 1e6 for energy in result['zero_energies']], width, label='zero parallelism', color='steelblue')
-    ax.bar(x + width/2, [energy * 1e6 for energy in result['data_energies']], width, label='data paralleism', color='darkorange')
+    ax.bar(x - width/2, [energy * 1e6 for energy in result['zero_energies']], width, label='zero parallelism', color='forestgreen')
+    ax.bar(x + width/2, [energy * 1e6 for energy in result['data_energies']], width, label='data paralleism', color='mediumpurple')
 
     ax.set_xlabel('Num PE Columns')
-    ax.set_ylabel('Energy (micro joules)')
-    ax.set_title(f"Energy vs Num PE Columns Plot for {result['workload']['label']}")
+    ax.set_ylabel(r'Energy $(\mu J)$')
+    # ax.set_title(f"Energy vs Num PE Columns Plot for {result['workload']['label']}")
     ax.set_xticks(x)
     ax.set_xticklabels(num_pe_meshX)
     ax.legend()
@@ -79,12 +85,12 @@ def plot_cycle_pe_meshX(result):
     width = 0.35
 
     fig, ax = plt.subplots()
-    ax.bar(x - width/2, result['zero_cycles'], width, label='zero parallelism', color='steelblue')
-    ax.bar(x + width/2, result['data_cycles'], width, label='data paralleism', color='darkorange')
+    ax.bar(x - width/2, result['zero_cycles'], width, label='zero parallelism', color='forestgreen')
+    ax.bar(x + width/2, result['data_cycles'], width, label='data paralleism', color='mediumpurple')
 
     ax.set_xlabel('Num PE Columns')
     ax.set_ylabel('Cycle')
-    ax.set_title(f"Cycle vs Num PE Columns Plot for {result['workload']['label']}")
+    # ax.set_title(f"Cycle vs Num PE Columns Plot for {result['workload']['label']}")
     ax.set_xticks(x)
     ax.set_xticklabels(num_pe_meshX)
     ax.legend()
@@ -110,7 +116,7 @@ def plot_energy_models(linear, ring, fc):
 
     ax.set_xlabel('Num GPUs')
     ax.set_ylabel('Energy Percentage')
-    ax.set_title(f"Energy Percentage vs Num GPUs Plot on {linear['workload']['label']}")
+    # ax.set_title(f"Energy Percentage vs Num GPUs Plot on {linear['workload']['label']}")
     ax.set_xticks(x)
     ax.set_xticklabels(num_gpus)
     ax.legend()
@@ -136,7 +142,7 @@ def plot_cycle_models(linear, ring, fc):
 
     ax.set_xlabel('Num GPUs')
     ax.set_ylabel('Cycle Percentage')
-    ax.set_title(f"Cycle Percentage vs Num GPUs Plot on {linear['workload']['label']}")
+    # ax.set_title(f"Cycle Percentage vs Num GPUs Plot on {linear['workload']['label']}")
     ax.set_xticks(x)
     ax.set_xticklabels(num_gpus)
     ax.legend()
