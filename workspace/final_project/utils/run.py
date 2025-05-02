@@ -1,4 +1,5 @@
 import math
+from utils.loaders import *
 
 def get_data_config(workload, pe_meshX, pe_meshY):
     assert workload['inputCh_size'] % pe_meshX == 0
@@ -93,3 +94,66 @@ def get_zero_cycles(result, network_model, workload):
     cycles = result.cycles
     threshold = network_model.get_threshold()
     return cycles if (network_transfer / cycles) <= threshold else math.ceil(network_transfer / threshold)
+
+# return num cycles and energy
+def get_zero_result(workload, num_gpus, pe_meshX, pe_meshY, network_class, **kwargs):
+    workload['batch_size'] = num_gpus # simplify the simulation
+    zero_config = get_zero_config(workload, pe_meshX, pe_meshY)
+    zero_result = run_timeloop_model(
+        zero_config,
+        architecture='designs/architecture/arch.yaml',
+        mapping='designs/architecture/map.yaml',
+        problem='layer_shapes/workload.yaml'
+    )
+    network_model = network_class(num_gpus)
+    cycles = get_zero_cycles(zero_result, network_model, workload)
+    energy = get_zero_energy(zero_result, network_model, workload)
+    return cycles, energy 
+
+# return num cycles and energy
+def get_data_result(workload, num_gpus, pe_meshX, pe_meshY, **kwargs):
+    workload['batch_size'] = num_gpus # simplify the simulation
+    data_config = get_data_config(workload, pe_meshX, pe_meshY)
+    data_result = run_timeloop_model(
+        data_config,
+        architecture='designs/architecture/arch.yaml',
+        mapping='designs/architecture/map.yaml',
+        problem='layer_shapes/workload.yaml'
+    )
+    cycles = get_data_cycles(data_result)
+    energy = get_data_energy(data_result)
+    return cycles, energy 
+
+def run(workload, config):
+    zero_cycle, zero_energy = get_zero_result(workload, **config)
+    zero_transfer = get_zero_network_transfer(workload)
+    data_cycle, data_energy = get_data_result(workload, **config)
+    return dict(zero_cycle=zero_cycle, 
+            zero_energy=zero_energy, 
+            zero_transfer=zero_transfer, 
+            data_cycle=data_cycle, 
+            data_energy=data_energy,
+           )
+
+def run_configs(workload, configs):
+    zero_cycles = []
+    zero_energies = []
+    zero_transfers = []
+    data_cycles = []
+    data_energies = []
+    for config in configs:
+        result = run(workload, config)
+        zero_cycles.append(result['zero_cycle'])
+        zero_energies.append(result['zero_energy'])
+        zero_transfers.append(result['zero_transfer'])
+        data_cycles.append(result['data_cycle'])
+        data_energies.append(result['data_energy'])
+        
+    return dict(zero_cycles=zero_cycles, 
+                zero_energies=zero_energies, 
+                zero_transfers=zero_transfers, 
+                data_cycles=data_cycles, 
+                data_energies=data_energies,
+                configs=configs,
+                workload=workload
+               )

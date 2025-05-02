@@ -1,5 +1,5 @@
 conv1 = dict(
-    inputCh_size = 24,
+    inputCh_size = 120,
     outputCh_size = 24,
     filter_height = 5,
     filter_width = 5,
@@ -9,7 +9,7 @@ conv1 = dict(
 )
 
 conv2 = dict(
-    inputCh_size = 96,
+    inputCh_size = 480,
     outputCh_size = 96,
     filter_height = 3,
     filter_width = 3,
@@ -19,7 +19,7 @@ conv2 = dict(
 )
 
 fc1 = dict(
-    inputCh_size = 48,
+    inputCh_size = 240,
     outputCh_size = 32,
     filter_height = 1,
     filter_width = 1,
@@ -29,7 +29,7 @@ fc1 = dict(
 )
 
 fc2 = dict(
-    inputCh_size = 96,
+    inputCh_size = 480,
     outputCh_size = 64,
     filter_height = 1,
     filter_width = 1,
@@ -37,10 +37,3 @@ fc2 = dict(
     ofmap_width = 1,
     label='fc2',
 )
-
-workloads = [
-    conv1,
-    conv2,
-    fc1,
-    fc2,
-]
